@@ -1,5 +1,5 @@
 # agentic_pb2s
-
+https://chatgpt.com/s/dr_68d9bc129cc4819194535bdc724797eb
 **Purpose:**  
 PB2S Ethos Framework. Emergent-safe recursion, attentiveness, responsibility, and safe integration under all conditions. Fully independent of external prompter once initialized.
 
