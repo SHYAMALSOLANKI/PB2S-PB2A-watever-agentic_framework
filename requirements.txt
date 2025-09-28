@@ -1,1 +1,5 @@
-# Minimal requirements for PB2S ethos framework (to be specified)
+# PB2S Agentic Framework Requirements
+jsonschema>=4.0.0
+datetime
+uuid
+logging
