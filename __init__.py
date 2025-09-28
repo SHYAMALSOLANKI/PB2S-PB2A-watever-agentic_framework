@@ -12,7 +12,11 @@ __author__ = "PB2S Framework Team"
 __description__ = "PB2S Ethos Framework for emergent-safe recursive AI systems"
 
 # Import main framework components
-from .core import PB2SFramework, SuitEngine, PB2S_CYCLE_SCHEMA, SandboxManager
+try:
+    from .core import PB2SFramework, SuitEngine, PB2S_CYCLE_SCHEMA, SandboxManager
+except ImportError:
+    # Fallback for direct execution
+    from core import PB2SFramework, SuitEngine, PB2S_CYCLE_SCHEMA, SandboxManager
 
 __all__ = [
     "PB2SFramework",
