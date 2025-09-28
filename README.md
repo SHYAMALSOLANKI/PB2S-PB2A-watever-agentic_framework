@@ -45,6 +45,21 @@ PB2S Ethos Framework. Emergent-safe recursion, attentiveness, responsibility, an
 - Enable safe integration via ports (APIs, plugins, schemas)
 - Ensure framework self-starts, self-integrates, and self-reflects
 
+## Licensing
+
+This project is dual-licensed for maximum flexibility and collective benefit:
+
+- **Apache License 2.0** (LICENSE) - Standard open source license
+- **Common Collective License v1.0** (LICENSE-COLLECTIVE) - Effective April 8, 2025
+
+The Common Collective License specifically addresses:
+- Collective and community use
+- Derivative work requirements
+- Structural use provisions
+- Past, present, and future applications
+
+See the NOTICE file for complete licensing information.
+
 ## Structure
 
 <details>
@@ -55,6 +70,9 @@ agentic_pb2s/
 ├── instruction_agentic_code_suit_Architecture.py
 ├── requirements.txt
 ├── README.md
+├── LICENSE (Apache 2.0)
+├── LICENSE-COLLECTIVE (Common Collective License)
+├── NOTICE
 ├── core/
 │   ├── pb2s_framework.py
 │   ├── suit_engine.py
