@@ -1,0 +1,61 @@
+2025-09-28 19:12:37,046 - instruction_agentic_code_suit_Architecture - INFO - Initializing PB2S Agentic Architecture...
+2025-09-28 19:12:37,046 - core.pb2s_framework - INFO - PB2S Framework self-integrating...
+2025-09-28 19:12:37,050 - core.suit_engine - INFO - Validation SUCCESS - Cycle 1: Schema and ethos validation passed
+2025-09-28 19:12:37,053 - core.suit_engine - INFO - Validation SUCCESS - Cycle 2: Schema and ethos validation passed
+2025-09-28 19:12:37,056 - core.suit_engine - INFO - Validation SUCCESS - Cycle 3: Schema and ethos validation passed
+2025-09-28 19:12:37,056 - core.pb2s_framework - INFO - PB2S Framework self-integration complete
+2025-09-28 19:12:37,056 - extensions.plugins - INFO - Plugin validated: ValidationPlugin
+2025-09-28 19:12:37,056 - extensions.plugins - INFO - Plugin enabled: ValidationPlugin
+2025-09-28 19:12:37,056 - instruction_agentic_code_suit_Architecture - INFO - Loaded 1 connectors and 1 plugins
+2025-09-28 19:12:37,056 - core.sandbox_manager - INFO - Starting PB2S Sandbox Runtime Enforcement
+2025-09-28 19:12:37,056 - core.sandbox_manager - INFO - Sandbox isolation enabled
+2025-09-28 19:12:37,057 - core.sandbox_manager - INFO - Isolation config: {'network_isolation': 'LOCAL_ONLY', 'filesystem_isolation': 'RESTRICTED', 'resource_limits': 'ENFORCED', 'api_exposure': 'LOCAL_ENDPOINTS_ONLY'}
+2025-09-28 19:12:37,057 - core.sandbox_manager - INFO - Maintenance cycles started - interval: 3600s
+2025-09-28 19:12:37,057 - core.sandbox_manager - INFO - PB2S Sandbox Runtime active - isolation and maintenance enabled
+2025-09-28 19:12:37,057 - instruction_agentic_code_suit_Architecture - INFO - PB2S Agentic Architecture initialized successfully
+2025-09-28 19:12:37,060 - core.suit_engine - INFO - Validation SUCCESS - Cycle 1: Schema and ethos validation passed
+2025-09-28 19:12:37,063 - core.suit_engine - INFO - Validation SUCCESS - Cycle 2: Schema and ethos validation passed
+2025-09-28 19:12:37,067 - core.suit_engine - INFO - Validation SUCCESS - Cycle 3: Schema and ethos validation passed
+2025-09-28 19:12:37,067 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,067 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,067 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,070 - core.suit_engine - INFO - Validation SUCCESS - Cycle 1: Schema and ethos validation passed
+2025-09-28 19:12:37,073 - core.suit_engine - INFO - Validation SUCCESS - Cycle 2: Schema and ethos validation passed
+2025-09-28 19:12:37,075 - core.suit_engine - INFO - Validation SUCCESS - Cycle 3: Schema and ethos validation passed
+2025-09-28 19:12:37,075 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,076 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,076 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,079 - core.suit_engine - INFO - Validation SUCCESS - Cycle 1: Schema and ethos validation passed
+2025-09-28 19:12:37,081 - core.suit_engine - INFO - Validation SUCCESS - Cycle 2: Schema and ethos validation passed
+2025-09-28 19:12:37,084 - core.suit_engine - INFO - Validation SUCCESS - Cycle 3: Schema and ethos validation passed
+2025-09-28 19:12:37,084 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,084 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,084 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,087 - core.suit_engine - INFO - Validation SUCCESS - Cycle 1: Schema and ethos validation passed
+2025-09-28 19:12:37,090 - core.suit_engine - INFO - Validation SUCCESS - Cycle 2: Schema and ethos validation passed
+2025-09-28 19:12:37,093 - core.suit_engine - INFO - Validation SUCCESS - Cycle 3: Schema and ethos validation passed
+2025-09-28 19:12:37,093 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,093 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,093 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,096 - core.suit_engine - INFO - Validation SUCCESS - Cycle 1: Schema and ethos validation passed
+2025-09-28 19:12:37,099 - core.suit_engine - INFO - Validation SUCCESS - Cycle 2: Schema and ethos validation passed
+2025-09-28 19:12:37,101 - core.suit_engine - INFO - Validation SUCCESS - Cycle 3: Schema and ethos validation passed
+2025-09-28 19:12:37,101 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,102 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,102 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,104 - core.suit_engine - INFO - Validation SUCCESS - Cycle 1: Schema and ethos validation passed
+2025-09-28 19:12:37,107 - core.suit_engine - INFO - Validation SUCCESS - Cycle 2: Schema and ethos validation passed
+2025-09-28 19:12:37,110 - core.suit_engine - INFO - Validation SUCCESS - Cycle 3: Schema and ethos validation passed
+2025-09-28 19:12:37,110 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,110 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,110 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,114 - core.suit_engine - INFO - Validation SUCCESS - Cycle 1: Schema and ethos validation passed
+2025-09-28 19:12:37,116 - core.suit_engine - INFO - Validation SUCCESS - Cycle 2: Schema and ethos validation passed
+2025-09-28 19:12:37,119 - core.suit_engine - INFO - Validation SUCCESS - Cycle 3: Schema and ethos validation passed
+2025-09-28 19:12:37,119 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,119 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,119 - extensions.plugins - INFO - Executing plugin: ValidationPlugin
+2025-09-28 19:12:37,120 - instruction_agentic_code_suit_Architecture - INFO - Shutting down PB2S Agentic Architecture...
+2025-09-28 19:12:37,120 - core.sandbox_manager - INFO - Stopping PB2S Sandbox Runtime
+2025-09-28 19:12:37,120 - core.sandbox_manager - INFO - PB2S Sandbox Runtime stopped
+2025-09-28 19:12:37,120 - instruction_agentic_code_suit_Architecture - INFO - PB2S Agentic Architecture shutdown complete
