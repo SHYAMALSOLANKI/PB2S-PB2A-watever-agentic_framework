@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/agentic-gpt-steps.schema.json",
+  "title": "Agentic GPT Setup Steps",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "string" },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/step" }
+    }
+  },
+  "required": ["version", "steps"],
+  "$defs": {
+    "pb2s_cycle_schema": {
+      "type": "object",
+      "properties": {
+        "cycle": { "type": "integer" },
+        "DRAFT": { "type": "string" },
+        "REFLECT": { "type": "array", "items": { "type": "string" } },
+        "REVISE": { "type": "string" },
+        "LEARNED": { "type": "string" },
+        "noise_log": { "type": "array", "items": { "type": "string" } },
+        "responsibility": { "type": "string" },
+        "validation_passed": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "version": { "type": "string" }
+      },
+      "required": [
+        "cycle","DRAFT","REFLECT","REVISE","LEARNED",
+        "noise_log","responsibility","validation_passed",
+        "timestamp","version"
+      ],
+      "additionalProperties": false
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["llm-backend", "suit-engine", "database"] },
+        "image": { "type": "string", "description": "Container image or build ref." },
+        "command": { "type": "array", "items": { "type": "string" } },
+        "env": { "type": "object", "additionalProperties": { "type": "string" } },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "host": { "type": "string", "pattern": "^127\\.0\\.0\\.1(:\\d+)?$" },
+              "container": { "type": "integer", "minimum": 1, "maximum": 65535 }
+            },
+            "required": ["container"]
+          },
+          "description": "Host bindings must be loopback-only."
+        },
+        "volumes": { "type": "array", "items": { "type": "string" } },
+        "depends_on": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["name", "type"]
+    },
+    "sandbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "orchestrator": { "type": "string", "enum": ["docker", "podman"] },
+        "expose_only_local_api": { "type": "boolean", "const": true },
+        "network_mode": { "type": "string", "enum": ["bridge", "host", "none"], "default": "bridge" },
+        "services": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/service" } },
+        "database": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean", "default": false },
+            "engine": { "type": "string", "enum": ["sqlite", "postgres"] },
+            "dsn": { "type": "string" }
+          }
+        },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "force_suit_path": { "type": "boolean", "const": true },
+            "deny_external_egress": { "type": "boolean", "default": true }
+          },
+          "required": ["force_suit_path"]
+        }
+      },
+      "required": ["orchestrator", "expose_only_local_api", "services", "policy"]
+    },
+    "middleware": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "language": { "type": "string", "const": "python" },
+        "entrypoint": { "type": "string" },
+        "flow": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ingress_intercept",
+              "enforce_pb2s",
+              "schema_validate",
+              "auto_repeat_on_fail",
+              "egress_gate"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "pb2s_enforcement": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "required_sections": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["DRAFT", "REFLECT", "REVISE", "LEARNED"] },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            "max_cycles": { "type": "integer", "minimum": 1, "default": 5 }
+          },
+          "required": ["required_sections"]
+        },
+        "validation_schema": {
+          "oneOf": [{ "$ref": "#/$defs/pb2s_cycle_schema" }, { "type": "object" }]
+        },
+        "validation_report": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "validation_passed": { "type": "boolean" },
+            "noise_log": { "type": "array", "items": { "type": "string" } },
+            "responsibility": { "type": "string", "enum": ["suit", "llm", "tooling", "user"] }
+          },
+          "required": ["validation_passed", "noise_log", "responsibility"]
+        },
+        "retry_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mode": { "type": "string", "enum": ["fixed", "exponential"] },
+            "max_retries": { "type": "integer", "minimum": 0, "default": 3 },
+            "backoff_ms": { "type": "integer", "minimum": 0, "default": 250 }
+          }
+        },
+        "audit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "capture_all_cycles": { "type": "boolean", "const": true },
+            "persist_location": { "type": "string" },
+            "redact_fields": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["capture_all_cycles"]
+        },
+        "egress_gate": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "return_only_on_pass": { "type": "boolean", "const": true },
+            "allowed_channels": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["user", "log", "tools"] }
+            }
+          },
+          "required": ["return_only_on_pass"]
+        }
+      },
+      "required": ["language", "flow", "pb2s_enforcement", "validation_report", "egress_gate"]
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^step-[a-z0-9-]+$" },
+        "title": { "type": "string" },
+        "goal": { "type": "string" },
+        "actions": { "type": "array", "items": { "type": "string" } },
+        "constraints": { "type": "array", "items": { "type": "string" } },
+        "runtime": { "$ref": "#/$defs/sandbox" },
+        "llm_backend": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provider": { "type": "string", "enum": ["llama.cpp", "Ollama", "GPT4All", "vLLM"] },
+            "model": { "type": "string" },
+            "parameters": { "type": "object" }
+          },
+          "required": ["provider", "model"]
+        },
+        "suit_logic": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "wrapping_mode": { "type": "string", "const": "outside-llm" },
+            "input_validation": { "type": "array", "items": { "type": "string" } },
+            "output_validation": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["wrapping_mode"]
+        },
+        "io_controls": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "prompt_channels": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["system", "developer", "user", "tools"] }
+            },
+            "logging": { "type": "string", "enum": ["none", "local", "remote-redacted"] },
+            "redaction": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "middleware": { "$ref": "#/$defs/middleware" },
+        "verification": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "title", "goal", "actions", "constraints"]
+    }
+  },
+  "examples": [
+    {
+      "version": "1.3.0",
+      "steps": [
+        {
+          "id": "step-1-agentic-window",
+          "title": "Define the Agentic Window",
+          "goal": "Provision an isolated execution environment for prompts, suit configs, and PB2S cycles.",
+          "actions": [
+            "Provision a dedicated container or VM.",
+            "Restrict network egress according to policy.",
+            "Mount only explicitly approved volumes.",
+            "Install and configure an open-source LLM runtime.",
+            "Set up suit logic as an external wrapper controlling I/O."
+          ],
+          "constraints": [
+            "All execution occurs inside the Agentic Window.",
+            "Use only open-source LLM backends.",
+            "Suit logic must wrap around the LLM and own I/O validation.",
+            "No calls to closed endpoints."
+          ]
+        },
+        {
+          "id": "step-2-suit-middleware",
+          "title": "Implement Suit as Middleware",
+          "goal": "Insert a Python middleware that filters all traffic between user and model, enforcing PB2S and schema validation.",
+          "actions": [
+            "Build the suit engine in Python.",
+            "Intercept user requests before the LLM call.",
+            "Run PB2S cycle: DRAFT → REFLECT → REVISE → LEARNED.",
+            "Validate against JSON schema; repeat on fail.",
+            "Gate egress so only validated outputs are returned."
+          ],
+          "constraints": [
+            "Middleware must run inside the Agentic Window.",
+            "LLM cannot emit unfiltered outputs to user.",
+            "All cycles are captured, audited, and filtered."
+          ],
+          "middleware": {
+            "language": "python",
+            "entrypoint": "suit.middleware:handle_request",
+            "flow": ["ingress_intercept","enforce_pb2s","schema_validate","auto_repeat_on_fail","egress_gate"],
+            "pb2s_enforcement": { "required_sections": ["DRAFT","REFLECT","REVISE","LEARNED"], "max_cycles": 5 },
+            "validation_schema": { "$ref": "#/$defs/pb2s_cycle_schema" },
+            "validation_report": { "validation_passed": false, "noise_log": [], "responsibility": "suit" },
+            "retry_policy": { "mode": "exponential", "max_retries": 3, "backoff_ms": 250 },
+            "audit": { "capture_all_cycles": true, "persist_location": "./logs/pb2s/", "redact_fields": ["api_key","password","private_key"] },
+            "egress_gate": { "return_only_on_pass": true, "allowed_channels": ["user","log"] }
+          }
+        },
+        {
+          "id": "step-3-formalize-json-schema",
+          "title": "Formalize JSON Schema",
+          "goal": "Define and enforce the machine-readable schema for each PB2S cycle.",
+          "actions": [
+            "Author the schema and attach it to middleware.validation_schema.",
+            "Enable strict validation in schema_validate phase.",
+            "Reject and log outputs that fail; trigger auto_repeat_on_fail."
+          ],
+          "constraints": [
+            "Cycle outputs must conform exactly to pb2s_cycle_schema.",
+            "Sandbox enforces validation every iteration.",
+            "No egress unless validation_passed is true."
+          ]
+        },
+        {
+          "id": "step-4-trial-room",
+          "title": "Build the Trial Room (Sandbox Execution)",
+          "goal": "Run a permanent sandbox (Docker/Podman) hosting LLM backend and Suit Engine; expose only local API; route all traffic through Suit.",
+          "actions": [
+            "Provision sandbox with orchestrator: docker or podman.",
+            "Run services: llm-backend, suit-engine; optional database for audits.",
+            "Bind APIs to 127.0.0.1 only.",
+            "Enforce that all requests pass through Suit Engine before LLM.",
+            "Persist audit logs for every cycle."
+          ],
+          "constraints": [
+            "No external servers exposed beyond localhost.",
+            "All interactions traverse Agentic Suit enforcement.",
+            "Audit logging enabled when database is available."
+          ],
+          "runtime": {
+            "orchestrator": "docker",
+            "expose_only_local_api": true,
+            "network_mode": "bridge",
+            "services": [
+              { "name": "llm", "type": "llm-backend", "image": "ollama/ollama:latest", "ports": [{ "host": "127.0.0.1:11434", "container": 11434 }] },
+              { "name": "suit", "type": "suit-engine", "image": "suit/engine:latest", "depends_on": ["llm"], "ports": [{ "host": "127.0.0.1:8080", "container": 8080 }] },
+              { "name": "db", "type": "database", "image": "postgres:16", "env": { "POSTGRES_PASSWORD": "change-me" } }
+            ],
+            "database": { "enabled": true, "engine": "postgres", "dsn": "postgres://user:pass@127.0.0.1:5432/pb2s" },
+            "policy": { "force_suit_path": true, "deny_external_egress": true }
+          },
+          "verification": [
+            "Only 127.0.0.1 is listening for all service ports.",
+            "Direct calls to LLM port from user client are denied; suit path required.",
+            "Audit table receives an entry for each PB2S cycle."
+          ]
+        }
+      ]
+    }
+  ]
+}
