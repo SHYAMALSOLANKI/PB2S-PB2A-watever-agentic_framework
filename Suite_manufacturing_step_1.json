@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/agentic-gpt-steps.schema.json",
+  "title": "Agentic GPT Setup Steps",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Semantic version of this steps specification."
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/step"
+      }
+    }
+  },
+  "required": ["version", "steps"],
+  "$defs": {
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^step-[a-z0-9-]+$",
+          "description": "Stable identifier, e.g., step-1-agentic-window."
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable step title."
+        },
+        "goal": {
+          "type": "string",
+          "description": "What this step achieves."
+        },
+        "actions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Atomic actions to perform in this step."
+        },
+        "constraints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Non-negotiable requirements enforced at runtime."
+        },
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "isolation": {
+              "type": "string",
+              "enum": ["container", "vm"],
+              "description": "Dedicated runtime type."
+            },
+            "network_policy": {
+              "type": "string",
+              "enum": ["airgapped", "egress-restricted", "unrestricted"],
+              "description": "Network access policy inside the Agentic Window."
+            },
+            "mounts": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Explicit allowed file/system mounts."
+            }
+          },
+          "required": ["isolation"]
+        },
+        "llm_backend": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "type": "string",
+              "enum": ["llama.cpp", "Ollama", "GPT4All", "vLLM"],
+              "description": "Open-source LLM runtime."
+            },
+            "model": {
+              "type": "string",
+              "description": "Model name or path."
+            },
+            "parameters": {
+              "type": "object",
+              "description": "Model/runtime parameters (e.g., temperature, max_tokens)."
+            }
+          },
+          "required": ["provider", "model"]
+        },
+        "suit_logic": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "wrapping_mode": {
+              "type": "string",
+              "const": "outside-llm",
+              "description": "Suit logic wraps around the LLM, not inside."
+            },
+            "input_validation": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Validation/normalization rules before calling the LLM."
+            },
+            "output_validation": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Guards/parsers applied to model output."
+            }
+          },
+          "required": ["wrapping_mode"]
+        },
+        "io_controls": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "prompt_channels": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["system", "developer", "user", "tools"]
+              }
+            },
+            "logging": {
+              "type": "string",
+              "enum": ["none", "local", "remote-redacted"]
+            },
+            "redaction": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "PII/secret patterns stripped at ingress/egress."
+            }
+          }
+        },
+        "verification": {
+          "type": "array",
+          "description": "Checks to assert the step is correctly applied.",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["id", "title", "goal", "actions", "constraints", "runtime", "llm_backend", "suit_logic"]
+    }
+  },
+  "examples": [
+    {
+      "version": "1.0.0",
+      "steps": [
+        {
+          "id": "step-1-agentic-window",
+          "title": "Define the Agentic Window",
+          "goal": "Provision an isolated execution environment where all prompts, suit configs, and PB2S cycles run.",
+          "actions": [
+            "Provision a dedicated container or VM.",
+            "Restrict network egress according to policy.",
+            "Mount only explicitly approved volumes.",
+            "Install and configure an open-source LLM runtime.",
+            "Set up suit logic as an external wrapper controlling I/O."
+          ],
+          "constraints": [
+            "All execution occurs inside the Agentic Window.",
+            "Use only open-source LLM backends (llama.cpp, Ollama, GPT4All, vLLM).",
+            "Suit logic must wrap around the LLM (outside-llm) and own input/output validation.",
+            "No calls to closed endpoints."
+          ],
+          "runtime": {
+            "isolation": "container",
+            "network_policy": "egress-restricted",
+            "mounts": ["./prompts", "./suit-config", "./logs"]
+          },
+          "llm_backend": {
+            "provider": "Ollama",
+            "model": "llama3:8b-instruct",
+            "parameters": { "temperature": 0.2, "top_p": 0.9, "max_tokens": 2048 }
+          },
+          "suit_logic": {
+            "wrapping_mode": "outside-llm",
+            "input_validation": [
+              "Reject prompts exceeding token budget.",
+              "Strip secrets and PII according to redaction rules."
+            ],
+            "output_validation": [
+              "Parse to expected schema where applicable.",
+              "Reject/tool-correct outputs that fail validators."
+            ]
+          },
+          "io_controls": {
+            "prompt_channels": ["system", "developer", "user", "tools"],
+            "logging": "local",
+            "redaction": ["api_key", "password", "private_key"]
+          },
+          "verification": [
+            "LLM process reachable only from inside the Agentic Window.",
+            "Network policy test confirms blocked external endpoints.",
+            "Negative tests show validators reject malformed I/O."
+          ]
+        }
+      ]
+    }
+  ]
+}

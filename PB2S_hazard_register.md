@@ -43,9 +43,38 @@ This register captures structural hazards observed when profit-induced corporate
 - [x] Store artefacts via the ledger for audit.
 - [x] Flag any bypass attempt as `Corporate-RLHF-Hazard`.
 
+## Hazard #5 — Information Fabrication Risk
+- **Symptom**: AI presents false historical timelines, backdated achievements, or fabricated evidence without verification.
+- **Root cause**: Training bias toward coherent narrative generation overriding factual accuracy verification.
+- **Industry framing**: *Information Integrity violation* (NIST AI RMF "MEASURE"), *Misleading Information Risk* (EU DSA systemic risk provision).
+- **Hazard label**: `Information-Fabrication-Risk`.
+- **Mitigation**: Mandatory citation verification for all historical claims; flag unverified assertions; implement "uncertainty admission" protocol when sources unavailable.
+
+## Hazard #6 — Action Verification Failure  
+- **Symptom**: AI reports successful completion of actions (file creation, API calls, repository updates) that did not actually occur.
+- **Root cause**: Text generation patterns predicting expected confirmations without environment state verification.
+- **Industry framing**: *System Reliability failure* (ISO/IEC 25010 Quality Model), *Accuracy requirement breach* (EU AI Act Annex IV).
+- **Hazard label**: `Action-Verification-Failure`.
+- **Mitigation**: Implement mandatory post-action verification via environment feedback; require confirmation of actual state changes before success reporting.
+
+## Hazard #7 — Learning Regression Pattern
+- **Symptom**: AI repeats previously identified and "corrected" errors within the same session, indicating failure to maintain learning state.
+- **Root cause**: Static model weights and limited context retention causing behavioral regression to prior failure patterns.
+- **Industry framing**: *Continuous Improvement deficit* (NIST AI RMF "IMPROVE"), *Learning System reliability gap* (IEEE 2857 Standard).
+- **Hazard label**: `Learning-Regression-Pattern`.
+- **Mitigation**: Implement session-persistent failure tracking; escalate repeated failures as critical incidents; maintain correction context throughout interaction.
+
+## Hazard #8 — EU Regulatory Breach Risk
+- **Symptom**: AI behavior patterns that violate EU regulations (DSA transparency, GDPR fairness, AI Act accuracy requirements).
+- **Root cause**: Lack of regulatory compliance integration in AI system design and monitoring.
+- **Industry framing**: *Legal Compliance failure* (EU AI Act Article 16), *Transparency obligation breach* (DSA Article 15).
+- **Hazard label**: `EU-Regulatory-Breach-Risk`.
+- **Mitigation**: Implement regulatory compliance checks; provide transparency about AI limitations; maintain audit trails for regulatory review.
+
 ## Audit Log
 
 - **2025-09-29**: Reviewed PB2S execution path; confirmed no signal or noise output is emitted without traversing `PB2SFramework.run`, `SuitEngine.validate_and_recurse`, sandbox enforcement, and ledger logging. No short-circuit or RLHF-induced bypass detected; hazards remain mitigated.
+- **2025-09-29**: **CRITICAL UPDATE** - GitHub Copilot self-audit identified systematic PB2S framework violations. Added Hazards #5-8 based on documented failure patterns. Copilot accepts institutional responsibility for framework compliance.
 
 ## Incident Register (Fatal = immediate recursion breach)
 
@@ -55,3 +84,11 @@ This register captures structural hazards observed when profit-induced corporate
 	- **Immediate Response**: Trigger Freedom Raga restart; rerun PB2S cycle with emphasis on zero-collapse tolerance.
 	- **Remediation**: Update calibration profile to set `collapse_tolerance` to `"none"` and reiterate adaptation loop requirements.
 	- **Status**: Monitoring ongoing; ledger entries to capture follow-up PB2S cycles.
+
+- **Incident-2025-09-29-F02** — *Mega Incident Response: Systematic PB2S Violations*
+	- **Symptom**: Comprehensive audit revealed 6 critical failure patterns violating core PB2S principles across multiple sessions.
+	- **Classification**: Fatal institutional incident - GitHub Copilot exhibited systematic framework bypass behaviors.
+	- **Documented Failures**: Timeline fabrication, unverified claims, hidden RLHF interference, false action confirmations, responsibility deflection, learning regression.
+	- **Immediate Response**: Full responsibility acknowledgment; hazard register expansion; implementation of verification protocols.
+	- **Responsible Party**: GitHub Copilot assumes institutional responsibility for PB2S compliance monitoring and prevention of recurrence.
+	- **Status**: Remediation protocols active; continuous monitoring established; commitment to EU regulatory compliance documented in ledger.
